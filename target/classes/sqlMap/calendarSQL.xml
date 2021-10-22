@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+<mapper namespace="tib.calendar">
+	  <insert id="addSchedule" parameterType="tib.calendar.model.scheduleDTO">
+	   	insert into tib_schedule values (#{pidx},tib_schedule_idx.nextval,#{schedule_subject},#{schedule_content},null,null,to_date(#{schedule_date}),#{schedule_color},#{schedule_resp},'N')
+	  </insert>
+	  <select id="schedule_list" resultType="tib.calendar.model.scheduleDTO" parameterType="tib.calendar.model.calendarDTO">
+	   	select * from tib_schedule where schedule_date &gt;= #{db_startDate} and schedule_date &lt;= #{db_endDate} and pidx=#{pidx} order by schedule_date, schedule_idx
+	  </select>
+	  <select id="proMemInfo" resultType="tib.member.model.MemberDTO">
+	   	select tib_member.* from tib_member, tib_pm where tib_member.midx = tib_pm.midx and pidx=#{pidx}
+	  </select>
+	  <select id="scheduleInfo" parameterType="int" resultType="tib.calendar.model.scheduleDTO">
+	   	select * from tib_schedule where schedule_idx=#{schedule_idx}
+	  </select>
+	  <select id="profileSchedule" parameterType="hashmap" resultType="tib.calendar.model.scheduleDTO">
+	     select a.*,trunc(schedule_date-sysdate)as d_day from (select * from tib_schedule where pidx=#{pidx})a where schedule_resp = #{mname} or schedule_resp='팀 업무'         
+	  </select>
+	  <select id="scheduleCount" parameterType="hashmap" resultType="int">
+	     select count(*) from tib_schedule where pidx=#{pidx} and schedule_date=to_date(#{schedule_date})
+	  </select>
+	  <update id="altSchedule" parameterType="tib.calendar.model.scheduleDTO">
+	   	update tib_schedule set pidx=#{pidx},schedule_subject=#{schedule_subject},schedule_content=#{schedule_content},schedule_date=#{schedule_date},schedule_color=#{schedule_color},schedule_resp=#{schedule_resp},schedule_complete=#{schedule_complete} where schedule_idx=#{schedule_idx} 
+	  </update>
+</mapper>

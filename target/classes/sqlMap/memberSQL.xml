@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="tib.member">
+     <insert id="memberInsert" parameterType="tib.member.model.MemberDTO">
+        insert into tib_member values(tib_member_seq.nextval,#{mname},#{mid},#{mpwd},#{memail},#{mtel},#{univcode},0,sysdate,'')
+     </insert>
+     <select id="idCheckSelect" parameterType="String" resultType="int">
+        select count(*) from tib_member where mid=#{mid}
+     </select>
+     <select id="loginSelect" parameterType="String" resultType="tib.member.model.MemberDTO">
+        select mpwd,certification from tib_member where mid=#{mid}
+     </select>
+     <select id="memberInfoSelect" parameterType="String" resultType="tib.member.model.MemberDTO">
+        select * from tib_member where mid=#{mid}
+     </select>
+     <update id="getKey" parameterType="hashmap">
+        update tib_member set certification=#{param2} where mid=#{param1}
+     </update>
+     <update id="alter_userKey" parameterType="hashmap">
+        update tib_member set certification='y',usable=1 where mid=#{param1} and certification=#{param2}
+     </update>
+     <select id="idSearchSelect" parameterType="hashmap" resultType="String">
+        select mid from tib_member where mname=#{mname} and memail=#{memail}
+     </select>
+     <select id="emailSelect" parameterType="String" resultType="String">
+        select memail from tib_member where mid=#{mid}
+     </select>
+     <update id="pwdUpdate" parameterType="hashmap">
+        update tib_member set mpwd = #{mpwd} where mid=#{mid}
+     </update>
+      <select id="memberList" parameterType="hashmap" resultType="tib.member.model.MemberDTO">
+        <![CDATA[
+        select * from (select rownum as rnum,a.* from (select * from tib_member order by mname asc )a)b where rnum>=#{start} and rnum<=#{end}
+       ]]>
+     </select>
+     <select id="countMember" resultType="int">
+        select count(*) from tib_member
+     </select>    
+     <select id="projectMemberInfo" parameterType="int" resultType="tib.member.model.MemberDTO">
+        select distinct tib_member.* from (select midx from tib_pm where pidx = #{pidx}) a,tib_member where tib_member.midx=a.midx 
+    </select>
+    <update id="updateCertification" parameterType="int">
+       update tib_member set certification = 'y' where midx=#{midx}
+    </update>
+    <delete id="deleteMember" parameterType="int">
+       delete from tib_member where midx=#{midx}
+    </delete>
+  </mapper>

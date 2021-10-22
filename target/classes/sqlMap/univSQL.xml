@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tib.univ">
+   <select id="univList" resultType="tib.univ.model.UnivDTO">
+      select * from tib_univ
+   </select>
+   <select id="getUnivcode" resultType="int" parameterType="String">
+   		select univcode from tib_univ where uemail=#{uemail}
+   </select>
+   <insert id="addUniv" parameterType="tib.univ.model.UnivDTO">
+         insert into tib_univ values(tib_univ_seq.nextval,#{uname},to_date(#{ustartdate}),to_date(#{uenddate}),#{uemail})
+   </insert>
+   <select id="univInfo" parameterType="int" resultType="tib.univ.model.UnivDTO">
+         select * from tib_univ where univcode=#{univCode}
+   </select>
+   <update id="updateUniv" parameterType="tib.univ.model.UnivDTO">
+          update tib_univ set uenddate=to_date(#{uenddate}),uemail=#{uemail} 
+             where univcode=#{univCode}
+   </update>
+   <delete id="deleteUniv" parameterType="int">
+         delete from tib_univ where univCode=#{univCode}
+   </delete>
+</mapper>

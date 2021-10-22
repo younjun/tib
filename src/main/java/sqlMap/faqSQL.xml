@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="tib.faq">
+   <select id="faqAllList" resultType="tib.faq.model.FaqDTO">
+         select * from tib_faq order by fidx desc
+   </select>
+   <insert id="faqInsert" parameterType="tib.faq.model.FaqDTO">
+         insert into tib_faq values(tib_faq_seq.nextval,#{fsubject},#{fcontent})
+   </insert>
+   <update id="faqUpdate" parameterType="tib.faq.model.FaqDTO">
+         update tib_faq set fsubject=#{fsubject} ,fcontent=#{fcontent} where fidx=#{fidx}
+   </update>
+   <delete id="faqDelete" parameterType="int">
+         delete from tib_faq where fidx=#{fidx}
+   </delete>
+</mapper>

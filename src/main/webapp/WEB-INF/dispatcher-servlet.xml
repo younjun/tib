@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- configs -->
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"></bean>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+	</bean>
+	<bean id="tibDown" class="tib.view.DownloadView"></bean>
+	<bean id="tibJson" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
+	<!--my batis -->
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"></property>
+	<property name="username" value="scott"></property>
+	<property name="password" value="1234"></property>
+</bean>
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+</bean>
+<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+</bean>
+<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"></constructor-arg>
+</bean>
+	<!-- my batis -->
+	<!-- controller -->
+	<bean id="indexController" class="tib.controller.IndexController"></bean>
+	<bean id="memberController" class="tib.controller.MemberController"></bean>
+	<bean id="createProject" class="tib.controller.ProjectController"></bean>
+	<bean id="faqController" class="tib.controller.FaqController"></bean>
+	<bean id="fileController" class="tib.controller.FileController"></bean>
+	<bean id="adminController" class="tib.controller.AdminController"></bean>
+	<bean id="searchController" class="tib.controller.SearchController"></bean>
+	<bean id="calendarController" class="tib.controller.CalendarController"></bean>
+   <bean id="dashboardController" class="tib.controller.DashboardController"> </bean>
+	<!-- controller -->
+	<!-- view -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="order" value="1"></property>
+	</bean>
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0"></property>
+	</bean>  
+	<!-- view -->
+	<!-- daocontroller -->
+	<bean id="memberDao" class="tib.member.model.MemberDAOImple">
+		<constructor-arg>
+			<ref bean="sqlSessionTemplate"></ref>
+		</constructor-arg>
+	</bean>
+	<bean id="projectDao" class="tib.project.model.ProjectDAOImple">
+		<constructor-arg>
+			<ref bean="sqlSessionTemplate"></ref>
+		</constructor-arg>
+	</bean>	
+	<bean id="univDao" class="tib.univ.model.UnivDAOImple">
+		<constructor-arg>
+			<ref bean="sqlSessionTemplate"></ref>
+		</constructor-arg>
+	</bean>
+	<bean id="faqDao" class="tib.faq.model.FaqDAOImple">
+		<constructor-arg>
+			<ref bean="sqlSessionTemplate"></ref>
+		</constructor-arg>
+	</bean>
+	<bean id="fileDao" class="tib.file.model.FileDAOImple">
+		<constructor-arg>
+			<ref bean="sqlSessionTemplate"></ref>
+		</constructor-arg>
+	</bean>
+	   <bean id="searchDao" class="tib.search.SearchDAOImple">
+      <constructor-arg>
+         <ref bean = "sqlSessionTemplate"></ref>
+      </constructor-arg>
+   </bean>
+   <bean id="calDao" class="tib.calendar.model.CalendarDAOImple">
+      <constructor-arg>
+         <ref bean="sqlSessionTemplate"></ref> 
+      </constructor-arg>
+   </bean>
+    <bean id="dashDao" class="tib.dashboard.model.DashboardDAOImple">
+      <constructor-arg>
+         <ref bean="sqlSessionTemplate"></ref> 
+      </constructor-arg>
+    </bean>
+    <bean id="servicesDao" class="tib.services.model.ServicesDAOImple">
+       <constructor-arg>
+          <ref bean="sqlSessionTemplate"></ref>
+       </constructor-arg>
+    </bean>
+	<!-- daocontroller -->
+	<!-- mail -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.gmail.com"></property>
+      <property name="port" value="587"></property>
+      <property name="username" value="koz941010@gmail.com"></property>
+      <property name="password" value="rnjsdyd12"></property>
+      <property name="defaultEncoding" value="utf-8"></property>
+      <property name="javaMailProperties">
+         <props>
+            <prop key="mail.transport.protocol">smtp</prop>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.debug">true</prop>
+         </props>
+      </property>
+   </bean>
+   <bean id="postMail" class="tib.mail.PostMail"></bean>
+	<!-- mail -->
+</beans>

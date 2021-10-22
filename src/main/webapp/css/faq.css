@@ -1,0 +1,36 @@
+@charset "UTF-8";
+.FAQID{
+   font-size:large;   
+}
+.FAQ {
+  font-family: sans-serif;
+}
+.FAQlist {
+  list-style: none;
+  padding: 0;
+}
+.FAQlist > li {
+  padding: 0;
+}
+.FAQlist-checkbox {
+  display: none;
+}
+.FAQtitle {
+  padding: 10px;
+  margin: 0;
+  border-top: 1px solid rgb(223, 204, 204);
+  background: #f4f4f4;
+  cursor: pointer;
+  display: block;
+}
+.FQdesc {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.5s;
+}
+.FAQdesc > div {
+  margin: 10px;
+}
+.FAQlist-checkbox:checked + .FAQtitle + .FAQdesc {
+  max-height: 1000px;
+}

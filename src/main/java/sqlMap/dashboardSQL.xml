@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="tib.dashboard">
+   <select id="memList" resultType="String" parameterType="tib.calendar.model.scheduleDTO">
+      select schedule_resp from tib_schedule where pidx=#{pidx} group by schedule_resp order by schedule_resp
+   </select>
+   <select id="workamount" resultType="String" parameterType="tib.calendar.model.scheduleDTO">
+      select count(*) from tib_schedule where pidx=45 group by schedule_resp order by schedule_resp
+   </select>       
+   <select id="teamWorkList" parameterType="int" resultType="tib.calendar.model.scheduleDTO">
+      select * from tib_schedule where pidx=#{pidx} and schedule_resp='팀 업무' ORDER BY SCHEDULE_DATE
+   </select>
+   <select id="memWorkList" parameterType="int" resultType="tib.calendar.model.scheduleDTO"> 
+       select tib_schedule.*,trunc(schedule_date-sysdate)as d_day from tib_schedule where pidx=#{pidx} ORDER BY SCHEDULE_DATE
+   </select>
+</mapper>

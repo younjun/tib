@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="tib.search">
+     <select id="searchFile" parameterType="hashmap" resultType="tib.file.model.FileDTO">
+        select tib_drive.* from tib_drive,(select pcode from tib_project,tib_pm where tib_project.pidx = tib_pm.pidx and tib_pm.midx = #{midx})a where tib_drive.pcode = a.pcode and dname like #{content} order by tib_drive.pcode desc
+     </select>
+     <select id="searchMember" parameterType="String" resultType="tib.member.model.MemberDTO">
+        select * from tib_member where mid like #{content} or mname like #{content}
+     </select>
+     <select id="searchProject" parameterType="String" resultType="tib.project.model.ProjectDTO">
+      select * from tib_project where pname like #{content}    
+     </select>   
+     <select id="searchSchedule" parameterType="hashmap" resultType="tib.calendar.model.scheduleDTO">
+        select tib_schedule.*,trunc(schedule_date-sysdate) as d_day from tib_schedule,(select pidx from tib_pm where midx=#{midx}) a where tib_schedule.pidx = a.pidx and schedule_subject like #{content} 
+     </select>
+     <select id="getProjectName" parameterType="int" resultType="String">
+      select pname from tib_project where pidx=#{pidx}     
+     </select>
+  </mapper>

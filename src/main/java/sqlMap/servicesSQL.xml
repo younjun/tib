@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     <mapper namespace="tib.services">
+        <select id="servicesAllList" resultType="tib.services.model.ServicesDTO">
+           select * from tib_services order by sidx asc
+        </select>
+        <insert id="servicesInsert" parameterType="tib.services.model.ServicesDTO">
+            <![CDATA[
+            insert into tib_services values(tib_services_seq.nextval,#{ssubject},#{scontent},#{simg})
+            ]]>
+        </insert>
+        <update id="servicesUpdate" parameterType="tib.services.model.ServicesDTO">
+           update tib_services set ssubject=#{ssubject},scontent=#{scontent},simg=#{simg} where sidx=#{sidx}
+        </update>
+        <delete id="servicesDelete" parameterType="int">
+           delete from tib_services where sidx=#{sidx}
+        </delete>
+     </mapper>

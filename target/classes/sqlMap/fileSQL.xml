@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="tib.file">
+  <insert id="saveFile" parameterType="tib.file.model.FileDTO">
+  	insert into tib_drive values(#{pcode},tib_drive_seq.nextval,#{mid},#{mname},#{dname},#{dkind},sysdate,#{fullName})
+  </insert>
+	  <select id="fileTotalSize" parameterType="String" resultType="int">
+	  	select count(*) from tib_drive where pcode=#{pcode}
+	  </select>
+	  <select id="getFileList" parameterType="hashmap" resultType="tib.file.model.FileDTO">
+		  <![CDATA[
+		  select a.* from (select tib_drive.*,rownum as rnum from tib_drive where pcode=#{pcode} order by didx desc)a where rnum>=#{start} and rnum<=#{end}
+		  ]]>
+	  </select>
+	  <select id="getFileDTO" parameterType="int" resultType="tib.file.model.FileDTO">
+	  	select * from tib_drive where didx=#{didx}
+	  </select>
+	  <delete id="deleteFileDB" parameterType="int">
+	  	delete from tib_drive where didx=#{didx}
+	  </delete>
+	  <select id="profileFileList" parameterType="hashmap" resultType="tib.file.model.FileDTO">
+	     <![CDATA[
+	     select * from (select a.*,rownum as rnum from (select * from tib_drive where pcode=#{pcode} and mid=#{mid} order by didx desc) a) b where rnum>=1 and rnum<=10
+	     ]]>
+	  </select>
+ </mapper>

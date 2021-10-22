@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tib.pm">
+   <insert id="addProjectMember" parameterType="hashmap">
+      insert into tib_pm values(#{pidx},#{midx})
+   </insert>
+   <delete id="deleteMemberPm" parameterType="int">
+      delete from tib_pm where midx=#{midx}
+   </delete>
+    <select id="projectMemberCheck" parameterType="hashmap" resultType="int">
+      select count(midx) from tib_pm where pidx=#{pidx} and midx=#{midx}
+   </select>
+</mapper>

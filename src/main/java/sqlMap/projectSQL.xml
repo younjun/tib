@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="tib.project">
+    <insert id="addProject" parameterType="tib.project.model.ProjectDTO">
+       insert into tib_project values(tib_project_seq.nextval,#{pname},#{pcode},#{plimit},#{plock},#{phost},1)
+    </insert>
+    <select id="checkPcode" parameterType="String" resultType="String">
+       select pcode from tib_project where pcode=#{pcode}
+    </select>
+    <select id="projectList" parameterType="int" resultType="tib.project.model.ProjectDTO">
+       select tib_project.* from tib_project,tib_pm where tib_project.pidx=tib_pm.pidx and midx=#{midx}
+    </select>
+    <select id="projectInfo" parameterType="String" resultType="tib.project.model.ProjectDTO">
+       select * from tib_project where pcode=#{pcode}
+    </select>
+    <delete id="projectDelete" parameterType="int">
+    	delete from tib_project where pidx=#{pidx}
+    </delete>
+    <delete id="pmDelete" parameterType="int">
+    	delete from tib_pm where pidx=#{pidx}
+    </delete>
+    <delete id="projectMemberDelete" parameterType="hashmap">
+    	delete from tib_pm where pidx=#{pidx} and midx=#{midx}
+    </delete>
+	<select id="allprojectList" parameterType="hashmap" resultType="tib.project.model.ProjectDTO">
+        <![CDATA[
+        select * from (select rownum as rnum,a.* from (select * from tib_project order by pidx asc )a)b where rnum>=#{start} and rnum<=#{end}
+       ]]>
+    </select>
+    <select id="publicProjectList" resultType="tib.project.model.ProjectDTO">
+       select * from tib_project where plock=0 order by pidx desc
+    </select>
+    <update id="updatePcountPlus" parameterType="int">
+       update tib_project set pcount=pcount+1 where pidx=#{pidx}
+    </update>
+    <update id="updatePcountMinus" parameterType="int">
+       update tib_project set pcount=pcount-1 where pidx=#{pidx}
+    </update>
+    <select id="projectCount" resultType="int">
+       select count(*) from tib_project
+    </select>
+  </mapper>
